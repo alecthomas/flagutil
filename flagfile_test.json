@@ -1,0 +1,7 @@
+{
+  "testbool": true,
+  "testint": 99,
+  "testfloat": 99.9,
+  "teststring": "a string",
+  "testduration": "99s"
+}
