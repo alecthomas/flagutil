@@ -7,8 +7,8 @@ import (
 	"os"
 )
 
-type FlagFile map[string]interface{}
-
+// ParseFlagsFromJSON parses values from a JSON file into a FlagSet. Keys in
+// the JSON file that do not correspond to flags will result in an error.
 func ParseFlagsFromJSON(filename string, flags *flag.FlagSet) error {
 	r, err := os.Open(filename)
 	if err != nil {
@@ -16,7 +16,7 @@ func ParseFlagsFromJSON(filename string, flags *flag.FlagSet) error {
 	}
 	defer r.Close()
 	decoder := json.NewDecoder(r)
-	var data FlagFile
+	var data map[string]interface{}
 	err = decoder.Decode(&data)
 	if err != nil {
 		return err
@@ -24,7 +24,7 @@ func ParseFlagsFromJSON(filename string, flags *flag.FlagSet) error {
 	for k, v := range data {
 		f := flags.Lookup(k)
 		if f == nil {
-			continue
+			return fmt.Errorf("unknown flag '%s'", k)
 		}
 		sv := fmt.Sprintf("%v", v)
 		f.Value.Set(sv)
