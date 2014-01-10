@@ -1,4 +1,4 @@
-package flagfile
+package flagutil
 
 import (
 	"flag"
@@ -20,4 +20,7 @@ func TestParseFlagsFromJSON(t *testing.T) {
 	assert.Equal(t, *testFloat, 99.9)
 	assert.Equal(t, *testString, "a string")
 	assert.Equal(t, *testDuration, time.Second*99)
+}
+
+func TestPrettyFormatFlags(t *testing.T) {
 }
