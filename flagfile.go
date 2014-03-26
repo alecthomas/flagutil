@@ -11,20 +11,21 @@ import (
 	"strings"
 )
 
-// ParseFlagsFromJSON parses values from a JSON file into a FlagSet. Keys in
+// ParseFlagsFromJSON parses values from a JSON stream into a FlagSet. Keys in
 // the JSON file that do not correspond to flags will result in an error.
-func ParseFlagsFromJSON(filename string, flags *flag.FlagSet) error {
-	r, err := os.Open(filename)
-	if err != nil {
-		return err
-	}
-	defer r.Close()
+func ParseFlagsFromJSON(r io.Reader, flags *flag.FlagSet) error {
 	decoder := json.NewDecoder(r)
 	var data map[string]interface{}
-	err = decoder.Decode(&data)
+	err := decoder.Decode(&data)
 	if err != nil {
 		return err
 	}
+	return ParseFlagsFromMap(data, flags)
+}
+
+// ParseFlagsFromMap loads flag values from a map[string]interface{} into a FlagSet. Keys in
+// the JSON file that do not correspond to flags will result in an error.
+func ParseFlagsFromMap(data map[string]interface{}, flags *flag.FlagSet) error {
 	for k, v := range data {
 		f := flags.Lookup(k)
 		if f == nil {

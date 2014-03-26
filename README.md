@@ -54,10 +54,19 @@ as "flag.Usage".
 #### func  ParseFlagsFromJSON
 
 ```go
-func ParseFlagsFromJSON(filename string, flags *flag.FlagSet) error
+func ParseFlagsFromJSON(r io.Reader, flags *flag.FlagSet) error
 ```
-ParseFlagsFromJSON parses values from a JSON file into a FlagSet. Keys in the
+ParseFlagsFromJSON parses values from a JSON stream into a FlagSet. Keys in the
 JSON file that do not correspond to flags will result in an error.
+
+#### func  ParseFlagsFromMap
+
+```go
+func ParseFlagsFromMap(data map[string]interface{}, flags *flag.FlagSet) error
+```
+ParseFlagsFromMap loads flag values from a map[string]interface{} into a
+FlagSet. Keys in the JSON file that do not correspond to flags will result in an
+error.
 
 #### func  PrettyFormatFlags
 
