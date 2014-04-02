@@ -9,7 +9,7 @@ import (
 	"os"
 	"strings"
 
-	flag "github.com/ogier/pflag"
+	flag "github.com/alecthomas/pflag"
 )
 
 // Fatalf prints an error message and exits.
