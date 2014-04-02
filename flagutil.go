@@ -15,6 +15,12 @@ import (
 // Fatalf prints an error message and exits.
 func Fatalf(format string, args ...interface{}) {
 	fmt.Fprintf(os.Stderr, "error: "+format+"\n", args...)
+	os.Exit(1)
+}
+
+// UsageErrorf prints an error, the application usage string, then exits.
+func UsageErrorf(format string, args ...interface{}) {
+	fmt.Fprintf(os.Stderr, "error: "+format+"\n", args...)
 	flag.Usage()
 	os.Exit(1)
 }
