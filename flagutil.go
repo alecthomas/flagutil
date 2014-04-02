@@ -3,12 +3,13 @@ package flagutil
 import (
 	"bytes"
 	"encoding/json"
-	"flag"
 	"fmt"
 	"go/doc"
 	"io"
 	"os"
 	"strings"
+
+	flag "github.com/ogier/pflag"
 )
 
 // ParseFlagsFromJSON parses values from a JSON stream into a FlagSet. Keys in

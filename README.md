@@ -1,4 +1,4 @@
-# Utilities for making life with Go's flags easier
+# Utilities for making life with [pflag](https://github.com/ogier/pflag) easier
 
 Example:
 
@@ -6,7 +6,7 @@ Example:
 package main
 
 import (
-    "flag"
+    flag "github.com/ogier/pflag"
     "github.com/alecthomas/flagutil"
 )
 
