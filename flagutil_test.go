@@ -1,10 +1,11 @@
 package flagutil
 
 import (
-	"flag"
 	"os"
 	"testing"
 	"time"
+
+	flag "github.com/ogier/pflag"
 
 	"github.com/stretchrcom/testify/assert"
 )
@@ -16,7 +17,7 @@ func TestParseFlagsFromJSON(t *testing.T) {
 	testFloat := flags.Float64("testfloat", 0.0, "test float")
 	testString := flags.String("teststring", "", "test string")
 	testDuration := flags.Duration("testduration", 0, "test duration")
-	r, err := os.Open("flagfile_test.json")
+	r, err := os.Open("flagutil_test.json")
 	assert.NoError(t, err)
 	defer r.Close()
 	assert.NoError(t, ParseFlagsFromJSON(r, flags))

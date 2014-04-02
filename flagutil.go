@@ -14,7 +14,8 @@ import (
 
 // Fatalf prints an error message and exits.
 func Fatalf(format string, args ...interface{}) {
-	fmt.Fprintf(os.Stderr, "error: "+format, args...)
+	fmt.Fprintf(os.Stderr, "error: "+format+"\n", args...)
+	flag.Usage()
 	os.Exit(1)
 }
 
@@ -44,22 +45,33 @@ func ParseFlagsFromMap(data map[string]interface{}, flags *flag.FlagSet) error {
 	return nil
 }
 
+func formatFlag(flag *flag.Flag) string {
+	flagString := ""
+	if flag.Shorthand != "" {
+		flagString += fmt.Sprintf("-%s, ", flag.Shorthand)
+	}
+	flagString += fmt.Sprintf("--%s=%s", flag.Name, flag.DefValue)
+	return flagString
+}
+
 // PrettyFormatFlags formats standard Go flag FlagSets in a way that doesn't
 // make your eyes bleed.
 func PrettyFormatFlags(w io.Writer, flags *flag.FlagSet) {
+	// Find flag column width.
 	l := 0
 	flags.VisitAll(func(flag *flag.Flag) {
-		if len(flag.Name) > l {
-			l = len(flag.Name)
+		fl := len(formatFlag(flag))
+		if fl > l {
+			l = fl
 		}
 	})
 
-	l += 9
+	l += 3
 
 	indent := strings.Repeat(" ", l)
 
 	flags.VisitAll(func(flag *flag.Flag) {
-		prefix := fmt.Sprintf("  %-*s", l-2, fmt.Sprintf("--%s=%s", flag.Name, flag.DefValue))
+		prefix := fmt.Sprintf("  %-*s", l-2, formatFlag(flag))
 		buf := bytes.NewBuffer(nil)
 		doc.ToText(buf, flag.Usage, "", "", 80-l)
 		lines := strings.Split(strings.TrimRight(buf.String(), "\n"), "\n")
