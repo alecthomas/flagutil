@@ -12,6 +12,12 @@ import (
 	flag "github.com/ogier/pflag"
 )
 
+// Fatalf prints an error message and exits.
+func Fatalf(format string, args ...interface{}) {
+	fmt.Fprintf(os.Stderr, "error: "+format, args...)
+	os.Exit(1)
+}
+
 // ParseFlagsFromJSON parses values from a JSON stream into a FlagSet. Keys in
 // the JSON file that do not correspond to flags will result in an error.
 func ParseFlagsFromJSON(r io.Reader, flags *flag.FlagSet) error {
