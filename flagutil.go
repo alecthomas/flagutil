@@ -9,6 +9,8 @@ import (
 	"os"
 	"strings"
 
+	"github.com/kr/pty"
+
 	flag "github.com/alecthomas/pflag"
 )
 
@@ -63,6 +65,13 @@ func formatFlag(flag *flag.Flag) string {
 // PrettyFormatFlags formats standard Go flag FlagSets in a way that doesn't
 // make your eyes bleed.
 func PrettyFormatFlags(w io.Writer, flags *flag.FlagSet) {
+	width := 80
+	if t, ok := w.(*os.File); ok {
+		if _, cols, err := pty.Getsize(t); err == nil {
+			width = cols
+		}
+	}
+
 	// Find flag column width.
 	l := 0
 	flags.VisitAll(func(flag *flag.Flag) {
@@ -79,7 +88,7 @@ func PrettyFormatFlags(w io.Writer, flags *flag.FlagSet) {
 	flags.VisitAll(func(flag *flag.Flag) {
 		prefix := fmt.Sprintf("  %-*s", l-2, formatFlag(flag))
 		buf := bytes.NewBuffer(nil)
-		doc.ToText(buf, flag.Usage, "", "", 80-l)
+		doc.ToText(buf, flag.Usage, "", "", width-l)
 		lines := strings.Split(strings.TrimRight(buf.String(), "\n"), "\n")
 		fmt.Fprintf(w, "%s%s\n", prefix, lines[0])
 		for _, line := range lines[1:] {
